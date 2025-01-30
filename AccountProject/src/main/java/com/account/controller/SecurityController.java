@@ -34,14 +34,12 @@ public class SecurityController {
 		System.out.println("Admin 요청입니다.");
 	}
 
-	@GetMapping("/login2")
+	@GetMapping("/loginV2")
 	public void login() {
-		System.out.println("로그인");
 	}
 
 	@GetMapping("/dashBoard")
 	public void dashBoard() {
-		System.out.println("로그인석세스");
 	}
 
 	@GetMapping("/accessDenied")

@@ -31,7 +31,7 @@ public class SecurityConfig {
 	                    .permitAll();
 	            })
 	            .formLogin(formLogin -> 
-	                formLogin.loginPage("/login2")
+	                formLogin.loginPage("/loginV2")
 	                         .defaultSuccessUrl("/dashBoard", true))
 	            .logout(logout -> 
 	                logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
