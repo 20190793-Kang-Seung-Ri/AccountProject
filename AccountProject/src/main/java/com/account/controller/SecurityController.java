@@ -34,7 +34,7 @@ public class SecurityController {
 		System.out.println("Admin 요청입니다.");
 	}
 
-	@GetMapping("/login")
+	@GetMapping("/login2")
 	public void login() {
 		System.out.println("로그인");
 	}
