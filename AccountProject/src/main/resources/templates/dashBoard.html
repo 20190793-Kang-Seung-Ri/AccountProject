@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>DashBoard</title>
+</head>
+<body>
+	<h1>
+		<font color="red">대쉬보드 화면</font>
+	</h1>
+	
+	<h4>
+		<!-- 로그인한 사용자 정보 표시 -->
+        <p>👤 로그인 사용자 : 
+            <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
+            <span sec:authorize="isAnonymous()">로그인 안됨</span>
+        </p>
+
+        <p>🔑 사용자 권한 : 
+            <span sec:authorize="isAuthenticated()" sec:authentication="authorities"></span>
+            <span sec:authorize="isAnonymous()">권한 없음</span>
+        </p>
+	</h4>
+	
+	<!-- 로그인 상태에 따라 버튼 변경 -->
+    <div>
+        <h5 sec:authorize="isAuthenticated()">
+            <form th:action="@{ /logout }" method="post">
+                <button type="submit">로그아웃</button>
+            </form>
+        </h5>
+
+        <h5 sec:authorize="isAnonymous()">
+            <a href="/login"><button>로그인</button></a>
+            <a href="/insert"><button>회원가입</button></a>
+        </h5>
+    </div>
+</body>
+</html>
