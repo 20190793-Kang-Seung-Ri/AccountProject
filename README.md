@@ -10,3 +10,5 @@ name varchar(30),
 role varchar(12),
 enabled char(1)
 );
+
+"2025-01-30 21:31" - connected DB
