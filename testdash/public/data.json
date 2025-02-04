@@ -1,0 +1,100 @@
+{
+    "user": {
+        "email": "chwon9721@gmail.com",
+        "budget": 3000000
+    },
+    "expenses": [
+        { "date": "2025-01-01", "category": "식사", "amount": 12000 },
+        { "date": "2025-01-01", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-02", "category": "식사", "amount": 14000 },
+        { "date": "2025-01-02", "category": "쇼핑", "amount": 35000 },
+
+        { "date": "2025-01-03", "category": "식사", "amount": 11000 },
+        { "date": "2025-01-03", "category": "교통", "amount": 4800 },
+
+        { "date": "2025-01-04", "category": "외식", "amount": 30000 },
+        { "date": "2025-01-04", "category": "레저", "amount": 60000 },
+
+        { "date": "2025-01-05", "category": "쇼핑", "amount": 50000 },
+        { "date": "2025-01-05", "category": "식사", "amount": 13000 },
+
+        { "date": "2025-01-06", "category": "식사", "amount": 12000 },
+        { "date": "2025-01-06", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-07", "category": "식사", "amount": 12500 },
+        { "date": "2025-01-07", "category": "쇼핑", "amount": 40000 },
+
+        { "date": "2025-01-08", "category": "식사", "amount": 14000 },
+        { "date": "2025-01-08", "category": "교통", "amount": 5200 },
+
+        { "date": "2025-01-09", "category": "식사", "amount": 13000 },
+        { "date": "2025-01-09", "category": "교통", "amount": 4800 },
+
+        { "date": "2025-01-10", "category": "월세", "amount": 600000 },
+        { "date": "2025-01-10", "category": "공과금", "amount": 70000 },
+        { "date": "2025-01-10", "category": "인터넷", "amount": 50000 },
+        { "date": "2025-01-10", "category": "식사", "amount": 14000 },
+
+        { "date": "2025-01-11", "category": "외식", "amount": 35000 },
+        { "date": "2025-01-11", "category": "레저", "amount": 90000 },
+
+        { "date": "2025-01-12", "category": "쇼핑", "amount": 45000 },
+        { "date": "2025-01-12", "category": "식사", "amount": 15000 },
+
+        { "date": "2025-01-13", "category": "식사", "amount": 13000 },
+        { "date": "2025-01-13", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-14", "category": "식사", "amount": 14000 },
+        { "date": "2025-01-14", "category": "쇼핑", "amount": 55000 },
+
+        { "date": "2025-01-15", "category": "식사", "amount": 12000 },
+        { "date": "2025-01-15", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-16", "category": "식사", "amount": 13000 },
+        { "date": "2025-01-16", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-17", "category": "식사", "amount": 12000 },
+        { "date": "2025-01-17", "category": "쇼핑", "amount": 60000 },
+
+        { "date": "2025-01-18", "category": "외식", "amount": 35000 },
+        { "date": "2025-01-18", "category": "레저", "amount": 100000 },
+
+        { "date": "2025-01-19", "category": "쇼핑", "amount": 55000 },
+        { "date": "2025-01-19", "category": "식사", "amount": 15000 },
+
+        { "date": "2025-01-20", "category": "식사", "amount": 12000 },
+        { "date": "2025-01-20", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-21", "category": "식사", "amount": 14000 },
+        { "date": "2025-01-21", "category": "쇼핑", "amount": 60000 },
+
+        { "date": "2025-01-22", "category": "식사", "amount": 12000 },
+        { "date": "2025-01-22", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-23", "category": "식사", "amount": 14000 },
+        { "date": "2025-01-23", "category": "쇼핑", "amount": 50000 },
+
+        { "date": "2025-01-24", "category": "식사", "amount": 12000 },
+        { "date": "2025-01-24", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-25", "category": "외식", "amount": 30000 },
+        { "date": "2025-01-25", "category": "레저", "amount": 80000 },
+        { "date": "2025-01-27", "category": "식사", "amount": 14000 },
+        { "date": "2025-01-27", "category": "쇼핑", "amount": 60000 },
+        { "date": "2025-01-26", "category": "식사", "amount": 14000 },
+        { "date": "2025-01-26", "category": "쇼핑", "amount": 60000 },
+
+        { "date": "2025-01-28", "category": "식사", "amount": 12000 },
+        { "date": "2025-01-28", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-29", "category": "식사", "amount": 14000 },
+        { "date": "2025-01-29", "category": "쇼핑", "amount": 50000 },
+
+        { "date": "2025-01-30", "category": "식사", "amount": 12000 },
+        { "date": "2025-01-30", "category": "교통", "amount": 5000 },
+
+        { "date": "2025-01-31", "category": "식사", "amount": 15000 },
+        { "date": "2025-01-31", "category": "쇼핑", "amount": 40000 }
+    ]
+}
