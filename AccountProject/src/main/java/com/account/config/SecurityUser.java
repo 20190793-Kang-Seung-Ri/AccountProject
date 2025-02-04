@@ -11,7 +11,7 @@ public class SecurityUser extends User {
 	private Users users;
 
 	public SecurityUser(Users users) {
-		super(users.getId(), users.getPassword(),
+		super(users.getUserid(), users.getPassword(),
 				AuthorityUtils.createAuthorityList(users.getRole().toString()));
 		this.users = users;
 	}

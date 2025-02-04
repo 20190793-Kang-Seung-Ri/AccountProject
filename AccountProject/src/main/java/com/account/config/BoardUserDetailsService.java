@@ -15,12 +15,12 @@ public class BoardUserDetailsService implements UserDetailsService {
 	private UserDao userDao;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Users user = userDao.findById(username);
-		if (user == null) {
-			throw new UsernameNotFoundException(username + " 사용자 없음");
+	public UserDetails loadUserByUsername(String userid) throws UsernameNotFoundException {
+		Users users = userDao.findById(userid);
+		if (users == null) {
+			throw new UsernameNotFoundException(userid + " 사용자 없음");
 		} else {
-			return new SecurityUser(user);
+			return new SecurityUser(users);
 		}
 	}
 }

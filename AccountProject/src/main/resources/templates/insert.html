@@ -3,23 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <title>insert</title>
+<script>
+	window.onload = function() {
+		// 현재 날짜와 시간 설정
+		let now = new Date();
+		let year = now.getFullYear();
+		let month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+		let day = String(now.getDate()).padStart(2, '0');
+		let hours = String(now.getHours()).padStart(2, '0');
+		let minutes = String(now.getMinutes()).padStart(2, '0');
+		let seconds = String(now.getSeconds()).padStart(2, '0');
+
+		let formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+		document.getElementById("hiredate").value = formattedDate;
+	};
+
+	function validateForm() {
+		let userid = document.getElementById("userid").value.trim();
+		let password = document.getElementById("password").value.trim();
+		let username = document.getElementById("username").value.trim();
+		let email = document.getElementById("email").value.trim();
+
+		if (userid === "" || password === "" || username === "" || email === "") {
+			alert("모든 필드를 입력해주세요.");
+			return false; // 폼 제출 방지
+		}
+		return true; // 폼 제출 허용
+	}
+</script>
 </head>
 <body>
 	<h3>회원 가입을 환영합니다.</h3>
-	<form action="insert" method="post" id="joinform">
+	<form action="insert" method="post" id="joinform"
+		onsubmit="return validateForm()">
 		<table>
 			<tr>
 				<td>id</td>
-				<td><input name="id" id="id"></td>
+				<td><input name="userid" id="userid" required></td>
 			</tr>
 			<tr>
 				<td>password</td>
-				<td><input name="password" type="password" id="password"></td>
+				<td><input name="password" type="password" id="password"
+					required></td>
 			</tr>
 			<tr>
 				<td>name</td>
-				<td><input name="name" id="name"></td>
+				<td><input name="username" id="username" required></td>
 			</tr>
+			<tr>
+				<td>email</td>
+				<td><input name="email" id="email" type="email" required></td>
+			</tr>
+			<!-- 가입일자를 숨김 -->
+			<input type="hidden" name="hiredate" id="hiredate">
 
 			<tr>
 				<td colspan="2"><input type="submit" value="가입"></td>

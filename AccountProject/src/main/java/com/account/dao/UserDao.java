@@ -8,9 +8,9 @@ import com.account.domain.Users;
 
 @Mapper
 public interface UserDao {
-	@Select("select * from users where id = #{ id }")
+	@Select("select * from user where userid = #{ userid }")
 	Users findById(String id);
 
-	@Insert("insert into users values (#{ id }, #{ password }, #{ name }, #{ role }, 'T')")
-	int insertUser(Users user);
+	@Insert("insert into user values (#{ userid }, #{ password }, #{ username }, #{ email }, #{ hiredate }, #{ role }, 'T')")
+	int insertUser(Users users);
 }
