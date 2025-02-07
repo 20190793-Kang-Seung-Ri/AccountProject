@@ -1,26 +1,33 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../styles/Login.css"; // ✅ CSS 적용
 
 function Login() {
     const [credentials, setCredentials] = useState({ userid: "", password: "" });
     const [errorMessage, setErrorMessage] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
-        console.log("입력값 변경됨:", credentials);
     };
-    
+
+    const handleClear = (field) => {
+        setCredentials({ ...credentials, [field]: "" });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         try {
             const response = await axios.post("http://localhost:8085/api/auth/login", credentials, { withCredentials: true });
-    
-            if (response.data.authenticated) {
+
+            if (response.data?.authenticated) {  // ✅ response.data가 없을 경우 대비
                 sessionStorage.setItem("user", JSON.stringify(response.data));
                 navigate("/dashboard");
+            } else {
+                setErrorMessage("인증 실패: 올바른 아이디 또는 비밀번호를 입력하세요.");
             }
         } catch (error) {
             if (error.response) {
@@ -34,85 +41,65 @@ function Login() {
     };
 
     return (
-        <div style={styles.container}>
-            <form onSubmit={handleSubmit} style={styles.form}>
-                <h2>로그인</h2>
-                {errorMessage && <p style={styles.error}>{errorMessage}</p>}
-                <input
-                    type="text"
-                    name="userid"
-                    placeholder="아이디"
-                    value={credentials.userid}
-                    onChange={handleChange}
-                    required
-                    style={styles.input}
+        <div className="container">
+            <form onSubmit={handleSubmit} className="form">
+                {/* ✅ 로고 클릭 시 대시보드로 이동 */}
+                <img 
+                    src="/assets/LOGO.png" 
+                    alt="logo" 
+                    className="image clickable" 
+                    onClick={() => navigate("/dashboard")} 
                 />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="비밀번호"
-                    value={credentials.password}
-                    onChange={handleChange}
-                    required
-                    style={styles.input}
-                />
-                <button type="submit" style={styles.loginButton}>로그인</button>
-                <button type="button" style={styles.signupButton} onClick={() => navigate("/signup")}>회원가입</button>
+                
+                {errorMessage && <p className="error">{errorMessage}</p>}
+
+                {/* 아이디 입력 필드 */}
+                <div className="input-wrapper">
+                    <input
+                        type="text"
+                        name="userid"
+                        placeholder="아이디"
+                        value={credentials.userid}
+                        onChange={handleChange}
+                        required
+                        className="input"
+                    />
+                    {credentials.userid && (
+                        <span className="clear-button" onClick={() => handleClear("userid")}>✖</span>
+                    )}
+                </div>
+
+                {/* 비밀번호 입력 필드 */}
+                <div className="input-wrapper">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="비밀번호"
+                        value={credentials.password}
+                        onChange={handleChange}
+                        required
+                        className="input"
+                    />
+                    {credentials.password && (
+                        <>
+                            <span className="clear-button" onClick={() => handleClear("password")}>✖</span>
+                            <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? "👓" : "🕶️"}
+                            </span>
+                        </>
+                    )}
+                </div>
+
+                <button type="submit" className="login-button">로그인</button>
+
+                <div className="links">
+                    <a href="/find-id" className="link">아이디 찾기 </a>| 
+                    <a href="/forgot-password" className="link"> 비밀번호 찾기 </a>| 
+                    <a href="/signup" className="link"> 회원가입</a>
+                </div>
             </form>
         </div>
     );
 }
-
-const styles = {
-    container: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#f5f5f5",
-    },
-    form: {
-        width: "300px",
-        background: "white",
-        borderRadius: "8px",
-        padding: "20px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        textAlign: "center",
-    },
-    input: {
-        width: "100%",
-        padding: "10px",
-        marginBottom: "10px",
-        border: "1px solid #ddd",
-        borderRadius: "5px",
-        fontSize: "14px",
-    },
-    loginButton: {
-        width: "100%",
-        padding: "10px",
-        backgroundColor: "#9b59b6",
-        color: "white",
-        border: "none",
-        borderRadius: "5px",
-        fontSize: "16px",
-        cursor: "pointer",
-        marginBottom: "10px",
-    },
-    signupButton: {
-        width: "100%",
-        padding: "10px",
-        backgroundColor: "#012345",
-        color: "white",
-        border: "none",
-        borderRadius: "5px",
-        fontSize: "16px",
-        cursor: "pointer",
-    },
-    error: {
-        color: "red",
-        fontSize: "14px",
-        marginBottom: "10px",
-    },
-};
 
 export default Login;

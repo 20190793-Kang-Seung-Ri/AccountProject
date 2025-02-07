@@ -1,0 +1,100 @@
+/* 전체 컨테이너 */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+/* 로그인 폼 */
+.form {
+    width: 300px;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 입력 필드 래퍼 */
+.input-wrapper {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+/* 입력 필드 스타일 */
+.input {
+    width: 92%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* 입력 필드 클리어 버튼 */
+.clear-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* 비밀번호 보기 아이콘 */
+.eye-icon {
+    position: absolute;
+    right: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #aaa;
+}
+
+/* 로고 이미지 */
+.image {
+    width: 88%;
+    max-width: 500px;
+    padding: 20px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* 로그인 버튼 */
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+/* 로그인 링크 스타일 */
+.links {
+    font-size: 12px;
+    color: black;
+}
+
+/* 개별 링크 스타일 */
+.link {
+    color: #888;
+    text-decoration: none;
+}
+
+/* 에러 메시지 */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* 클릭 가능한 요소 */
+.clickable {
+    cursor: pointer;
+}
