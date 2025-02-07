@@ -1,59 +1,19 @@
 package com.account.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import com.account.config.UserService;
-import com.account.domain.Users;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/")
 public class SecurityController {
-	@Autowired
-	UserService service;
-	
-	@GetMapping("/")
-	public String index() {
-		System.out.println("index 요청입니다.");
-		return "index";
-	}
+    @GetMapping
+    public String index() {
+        return "forward:/index.html";  // ✅ React로 포워딩
+    }
 
-	@GetMapping("/member")
-	public void forMember() {
-		System.out.println("Member 요청입니다.");
-	}
-
-	@GetMapping("/manager")
-	public void forManager() {
-		System.out.println("Manager 요청입니다.");
-	}
-
-	@GetMapping("/admin")
-	public void forAdmin() {
-		System.out.println("Admin 요청입니다.");
-	}
-
-	@GetMapping("/loginV2")
-	public void login() {
-	}
-
-	@GetMapping("/dashBoard")
-	public void dashBoard() {
-	}
-
-	@GetMapping("/accessDenied")
-	public void accessDenied() {
-	}
-
-	@GetMapping("/insert")
-	public void insert() {
-	}
-
-	@PostMapping("/insert")
-	public String insert(Users users) {
-		service.insertUser(users);
-
-		return "redirect:/";
-	}
+    @GetMapping("/accessDenied")
+    public String accessDenied() {
+        return "forward:/index.html";  // ✅ React에서 처리
+    }
 }

@@ -9,7 +9,7 @@ import com.account.domain.Users;
 @Mapper
 public interface UserDao {
 	@Select("select * from user where userid = #{ userid }")
-	Users findById(String id);
+	Users findById(String userid);
 
 	@Insert("insert into user values (#{ userid }, #{ password }, #{ username }, #{ email }, #{ hiredate }, #{ role }, 'T')")
 	int insertUser(Users users);

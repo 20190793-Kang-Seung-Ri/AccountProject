@@ -10,18 +10,22 @@ import com.account.domain.Users;
 
 @Service
 public class UserService {
-	@Autowired
-	UserDao dao;
+    @Autowired
+    UserDao dao;
 
-	@Autowired
-	private PasswordEncoder encoder;
+    @Autowired
+    private PasswordEncoder encoder;
 
-	public int insertUser(Users users) {
-		users.setPassword(encoder.encode(users.getPassword()));
-		users.setRole(Role.ROLE_MEMBER);
+    // ✅ 회원가입 시 비밀번호 암호화 적용
+    public int insertUser(Users users) {
+        users.setPassword(encoder.encode(users.getPassword())); // ✅ 비밀번호 암호화
+        users.setRole(Role.ROLE_MEMBER); // ✅ 기본 역할 설정
 
-		int i = dao.insertUser(users);
+        return dao.insertUser(users);
+    }
 
-		return i;
-	}
+    // ✅ 사용자 정보 조회 (로그인 시 사용)
+    public Users getUserById(String userid) {
+        return dao.findById(userid);
+    }
 }
