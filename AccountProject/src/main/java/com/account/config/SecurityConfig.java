@@ -43,7 +43,7 @@ public class SecurityConfig {
 						.invalidateHttpSession(true) // ✅ 세션 무효화
 						.clearAuthentication(true) // ✅ 인증 정보 삭제
 						.deleteCookies("JSESSIONID") // ✅ 세션 쿠키 삭제
-						.logoutSuccessHandler((request, response, authentication) -> {
+						.logoutSuccessHandler((_, response, _) -> {
 							response.setStatus(HttpServletResponse.SC_OK);
 							response.getWriter().flush();
 						}))
