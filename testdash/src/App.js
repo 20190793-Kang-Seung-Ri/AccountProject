@@ -2,31 +2,78 @@ import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Calendar from "./components/Calendar";
 import StatBox from "./components/StatBox";
+import Sidebar from "./components/Sidebar";
 import "./index.css";
-import Sidebar from "./components/Sidebar"; // ✅ Sidebar 추가
+
+// 외부 API 주소
+const API_URL = "http://34.47.93.101:8080/data.json";
+
+// 카테고리 변환 객체 (영어 → 한국어)
+const categoryMap = {
+  "Meal": "식사",
+  "Transport": "교통",
+  "Shopping": "쇼핑",
+  "Dining Out": "외식", // 공백이 있어도 문자열 키 사용
+  "Leisure": "레저",
+  "Rent": "월세",
+  "Utilities": "공과금",
+  "Internet": "인터넷",
+};
+
 
 const App = () => {
   const [user, setUser] = useState({ email: "", budget: 0 });
   const [expenses, setExpenses] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/data.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setUser(data.user || { email: "", budget: 0 });
-        setExpenses(data.expenses || []);
-      })
-      .catch((error) => console.error("❌ 데이터 불러오기 실패:", error));
+    const fetchData = async () => {
+      try {
+        console.log("🚀 API 요청 시작:", API_URL);
+        const response = await fetch(API_URL, {
+          mode: "cors",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("✅ API 응답 데이터:", data);
+
+        // 카테고리 한국어 변환 후 저장
+        const formattedExpenses = data.expenses.map((expense) => ({
+          ...expense,
+          category: categoryMap[expense.category] || expense.category, // 변환이 없으면 원래 값 유지
+        }));
+
+        setUser(data?.user || { email: "", budget: 0 });
+        setExpenses(formattedExpenses);
+      } catch (error) {
+        console.error("❌ 데이터 불러오기 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // ✅ 1. 최대 지출 카테고리 계산
+  if (loading) {
+    return <div className="loading">데이터 불러오는 중...</div>;
+  }
+
+  // 🔹 최대 지출 카테고리 계산
   const categoryTotals = expenses.reduce((acc, expense) => {
     acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
     return acc;
   }, {});
 
   const maxCategory = Object.entries(categoryTotals).reduce(
-    (max, [category, amount]) => (amount > max.amount ? { category, amount } : max),
+    (max, [category, amount]) =>
+      amount > max.amount ? { category, amount } : max,
     { category: "", amount: 0 }
   ).category;
 
@@ -35,33 +82,31 @@ const App = () => {
     datasets: [
       {
         data: Object.values(categoryTotals),
-        backgroundColor: ["rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)", "rgba(75, 192, 192, 0.6)"],
-        borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
+        backgroundColor: ["#36A2EB", "#FF6384", "#4BC0C0"],
+        borderColor: ["#36A2EB", "#FF6384", "#4BC0C0"],
         borderWidth: 1,
       },
     ],
   };
 
-  // ✅ 2. 예산 소진율 계산
+  // 🔹 예산 소진율 계산
   const totalSpent = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const budgetUsageData = {
     labels: ["소진", "남은 예산"],
     datasets: [
       {
-        data: [totalSpent, user.budget - totalSpent],
-        backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(255, 159, 64, 0.6)"],
-        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 159, 64, 1)"],
+        data: [totalSpent, Math.max(user.budget - totalSpent, 0)],
+        backgroundColor: ["#4BC0C0", "#FF9F40"],
+        borderColor: ["#4BC0C0", "#FF9F40"],
         borderWidth: 1,
       },
     ],
   };
 
-  // ✅ 3. 오늘 하루 지출 계산 (1월 31일 기준)
-  const todayDate = "2025-01-31"; 
-  const dailyExpenses = expenses.filter(expense => expense.date === todayDate);
+  // 🔹 선택된 날짜의 하루 지출 계산
+  const dailyExpenses = expenses.filter((expense) => expense.date === selectedDate);
   const dailySpent = dailyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
-  // ✅ 4. 하루 지출 차트 데이터
   const dailyCategoryTotals = dailyExpenses.reduce((acc, expense) => {
     acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
     return acc;
@@ -72,65 +117,45 @@ const App = () => {
     datasets: [
       {
         data: Object.values(dailyCategoryTotals),
-        backgroundColor: ["rgba(153, 102, 255, 0.6)", "rgba(255, 159, 64, 0.6)", "rgba(75, 192, 192, 0.6)"],
-        borderColor: ["rgba(153, 102, 255, 1)", "rgba(255, 159, 64, 1)", "rgba(75, 192, 192, 1)"],
+        backgroundColor: ["#9966FF", "#FF9F40", "#4BC0C0"],
+        borderColor: ["#9966FF", "#FF9F40", "#4BC0C0"],
         borderWidth: 1,
       },
     ],
   };
 
-  // ✅ 최근 4주간 주간 지출 추이 계산 (오늘 날짜 기준)
-const getWeekStartDate = (weeksAgo) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - today.getDay() - (weeksAgo * 7)); // 각 주의 일요일
-  return weekStart;
-};
-
-// ✅ 오늘 날짜 기준으로 각 주의 총 지출 계산
-const weeklyTotals = [3, 2, 1, 0].map(weeksAgo => {
-  const weekStart = getWeekStartDate(weeksAgo);
-  const weekEnd = getWeekStartDate(weeksAgo - 1);
-
-  return expenses
-    .filter(expense => {
-      const expenseDate = new Date(expense.date);
-      return expenseDate >= weekStart && expenseDate < weekEnd;
-    })
-    .reduce((sum, expense) => sum + expense.amount, 0);
-});
-
-// ✅ 주간 지출 차트 데이터
-const weeklyExpenseData = {
-  labels: ["4주 전", "3주 전", "2주 전", "이번 주"],
-  datasets: [
-    {
-      data: weeklyTotals,
-      backgroundColor: "rgba(75, 192, 192, 0.6)",
-      borderColor: "rgba(75, 192, 192, 1)",
-      borderWidth: 1,
-    },
-  ],
-};
-
-
   return (
     <div className="app">
       <Header />
       <div className="main-layout">
-        <Sidebar />  {/* ✅ Sidebar 추가 */}
-      <div className="content">
-        <Calendar />
-        <div className="stats-container">
-          <StatBox title="최대 지출 카테고리" value={maxCategory || "없음"} chartData={maxExpenseData} chartType="pie" />
-          <StatBox title="예산 소진율" value={`${((totalSpent / user.budget) * 100).toFixed(1)}%`} chartData={budgetUsageData} chartType="doughnut" />
-          <StatBox title="오늘 하루 지출" value={`${dailySpent.toLocaleString()}원`} chartData={dailyExpenseData} chartType="bar" />
-          <StatBox title="주간 지출 추이" chartData={weeklyExpenseData} chartType="line" />
+        <Sidebar />
+        <div className="content">
+          <Calendar onSelectDate={setSelectedDate} />
+          <div className="stats-container">
+            <StatBox
+              title="최대 지출 카테고리"
+              value={maxCategory || "없음"}
+              chartData={maxExpenseData}
+              chartType="pie"
+            />
+            <StatBox
+              title="예산 소진율"
+              value={`${
+                user.budget ? ((totalSpent / user.budget) * 100).toFixed(1) : 0
+              }%`}
+              chartData={budgetUsageData}
+              chartType="doughnut"
+            />
+            <StatBox
+              title={`오늘 날짜(${selectedDate}) 하루 지출`}
+              value={`${dailySpent.toLocaleString()}원`}
+              chartData={dailyExpenseData}
+              chartType="bar"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };
 
