@@ -29,26 +29,41 @@ public class SecurityConfig {
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
-		security.cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 설정
+		security.cors(
+					cors -> cors
+					.configurationSource(corsConfigurationSource())
+				) // ✅ CORS 설정
 				.csrf(csrf -> csrf.disable()) // ✅ CSRF 비활성화 (REST API 환경에서는 필요 없음)
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // ✅ 세션
-																												// 유지
+				.sessionManagement(
+					session -> session
+					.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+				) // ✅ 세션
 				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/api/auth/login", "/api/users/register").permitAll() // ✅ 로그인 &
-																											// 회원가입은 누구나
-																											// 접근 가능
-								.requestMatchers("/api/userinfo").permitAll() // ✅ 로그인한 사용자만 접근 가능
-								.anyRequest().permitAll() // ✅ 그 외 모든 요청 허용 (필요에 따라 수정 가능)
-				).logout(logout -> logout.logoutUrl("/logout") // ✅ 로그아웃 엔드포인트 설정
-						.invalidateHttpSession(true) // ✅ 세션 무효화
-						.clearAuthentication(true) // ✅ 인증 정보 삭제
-						.deleteCookies("JSESSIONID") // ✅ 세션 쿠키 삭제
-						.logoutSuccessHandler((_, response, _) -> {
+					auth -> auth
+					.requestMatchers("/api/auth/login", "/api/users/register")
+					.permitAll() // ✅ 로그인 & 회원가입은 누구나 접근 가능
+					.requestMatchers("/api/userinfo")
+					.permitAll() // ✅ 로그인한 사용자만 접근 가능
+					.anyRequest()
+					.permitAll() // ✅ 그 외 모든 요청 허용 (필요에 따라 수정 가능)
+				)
+				.logout(
+					logout -> logout
+					.logoutUrl("/logout") // ✅ 로그아웃 엔드포인트 설정
+					.invalidateHttpSession(true) // ✅ 세션 무효화
+					.clearAuthentication(true) // ✅ 인증 정보 삭제
+					.deleteCookies("JSESSIONID") // ✅ 세션 쿠키 삭제
+					.logoutSuccessHandler(
+						(_, response, _) -> {
 							response.setStatus(HttpServletResponse.SC_OK);
 							response.getWriter().flush();
-						}))
-				.exceptionHandling(exception -> exception.accessDeniedPage("/accessDenied") // ✅ 권한 없는 사용자의 접근 거부 페이지
-				).userDetailsService(boardUserDetailsService) // ✅ 인증된 사용자 정보 유지
+						})
+				)
+				.exceptionHandling(
+					exception -> exception
+					.accessDeniedPage("/accessDenied") // ✅ 권한 없는 사용자의 접근 거부 페이지
+				)
+				.userDetailsService(boardUserDetailsService) // ✅ 인증된 사용자 정보 유지
 				.authenticationProvider(authenticationProvider()); // ✅ 인증 프로바이더 추가
 
 		return security.build();
