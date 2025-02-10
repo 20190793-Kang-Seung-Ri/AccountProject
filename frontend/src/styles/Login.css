@@ -98,3 +98,9 @@
 .clickable {
     cursor: pointer;
 }
+
+.input.disabled {
+    color: #888;
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}

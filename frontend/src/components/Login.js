@@ -21,11 +21,15 @@ function Login() {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:8085/api/auth/login", credentials, { withCredentials: true });
+            const response = await axios.post(
+                "http://localhost:8085/api/auth/login",
+                credentials,
+                { withCredentials: true } // ✅ 세션 유지
+            );
 
-            if (response.data?.authenticated) {  // ✅ response.data가 없을 경우 대비
-                sessionStorage.setItem("user", JSON.stringify(response.data));
-                navigate("/dashboard");
+            if (response.data?.authenticated) {
+                console.log("✅ 로그인 성공, 사용자 정보:", response.data);
+                navigate("/dashboard"); // ✅ 로그인 성공 시 대시보드로 이동
             } else {
                 setErrorMessage("인증 실패: 올바른 아이디 또는 비밀번호를 입력하세요.");
             }

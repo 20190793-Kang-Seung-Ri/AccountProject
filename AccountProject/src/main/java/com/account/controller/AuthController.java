@@ -10,7 +10,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -40,7 +43,16 @@ public class AuthController {
 
 			// ✅ 인증 정보 저장
 			SecurityContextHolder.getContext().setAuthentication(authentication);
+			
+			// ✅ 현재 로그인된 사용자 정보 가져오기
+	        Object principal = authentication.getPrincipal();
+	        
 			logger.info("✅ 로그인 성공: {}", userid);
+			logger.info("🔍 principal 객체: {}", principal);
+			
+			// ✅ 인증 정보를 세션에도 저장
+			session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+			session.setAttribute("PRINCIPAL", principal); // ✅ principal 객체 저장
 
 			// ✅ 응답 생성
 			response.put("message", "Login successful");

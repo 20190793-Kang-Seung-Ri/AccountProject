@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: accdb
+      MYSQL_USER: accdbuser
+      MYSQL_PASSWORD: accdbuserpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # 초기 데이터 스크립트
+
+  backend:
+    build: .
+    container_name: springboot-backend
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/accdb
+      SPRING_DATASOURCE_USERNAME: accdbuser
+      SPRING_DATASOURCE_PASSWORD: accdbuserpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"  # GCP에서는 80 대신 8080 사용 가능
+
+volumes:
+  mysql_data:

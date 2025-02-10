@@ -43,15 +43,22 @@ function Signup() {
         }
 
         try {
-            const response = await axios.post("http://localhost:8085/api/users/register", formData);
-
+            const response = await axios.post("http://localhost:8085/api/users/register", formData, { withCredentials: true });
+    
+            // ✅ 회원가입 성공 메시지 표시
             alert(response.data?.message || "회원가입 성공!");
             navigate("/dashboard");
         } catch (error) {
+            console.error("회원가입 오류:", error);
+    
             if (error.response?.data?.message) {
                 setErrorMessage(error.response.data.message);
+            } else if (error.response) {
+                setErrorMessage("서버 응답 오류: " + error.response.status);
+            } else if (error.request) {
+                setErrorMessage("서버에 응답이 없습니다. 네트워크 상태를 확인해주세요.");
             } else {
-                setErrorMessage("회원가입에 실패했습니다.");
+                setErrorMessage("알 수 없는 오류가 발생했습니다.");
             }
         }
     };

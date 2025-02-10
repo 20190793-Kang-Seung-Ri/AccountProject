@@ -1,25 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/Login.css";
 
 function Dashboard() {
     const [userInfo, setUserInfo] = useState({
+        userid: "",
         username: "",
+        email: "",
+        hiredate: "",
         authorities: [],
         authenticated: false,
     });
 
-    const navigate = useNavigate();
-
     useEffect(() => {
-        // ✅ 세션 또는 로컬 스토리지에서 로그인 정보 가져오기
-        const storedUser = sessionStorage.getItem("user"); // localStorage.getItem("user") 도 가능
-
-        if (storedUser) {
-            setUserInfo(JSON.parse(storedUser)); // ✅ 저장된 로그인 정보 사용
-        }
-    }, [navigate]);
+        axios.get("http://localhost:8085/api/userinfo", { withCredentials: true })
+            .then(response => {
+                if (response.data.authenticated) {
+                    setUserInfo({
+                        userid: response.data.userid,
+                        username: response.data.username,
+                        email: response.data.email,
+                        hiredate: response.data.hiredate,
+                        authorities: response.data.authorities || [],
+                        authenticated: true,
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("❌ 사용자 정보 불러오기 실패:", error);
+                setUserInfo({ authenticated: false }); // 인증 실패 시 초기화
+            });
+    }, []);
+    
 
     const handleLogout = () => {
         axios.post("http://localhost:8085/logout", {}, { withCredentials: true })
@@ -40,15 +52,18 @@ function Dashboard() {
     return (
         <div>
             <h1 style={{ color: "red" }}>대쉬보드 화면</h1>
-
+    
             <h4>
                 <p>👤 로그인 사용자 : {userInfo.authenticated ? userInfo.username : "로그인 안됨"}</p>
                 <p>🔑 사용자 권한 : {userInfo.authenticated ? (userInfo.authorities?.join(", ") || "권한 없음") : "권한 없음"}</p>
             </h4>
-
+    
             <div>
                 {userInfo.authenticated ? (
-                    <button onClick={handleLogout}>로그아웃</button>
+                    <>
+                        <button onClick={handleLogout}>로그아웃</button>
+                        <a href="/edit"><button>회원정보 수정</button></a>
+                    </>
                 ) : (
                     <>
                         <a href="/login"><button>로그인</button></a>
@@ -58,6 +73,7 @@ function Dashboard() {
             </div>
         </div>
     );
+    
 }
 
 export default Dashboard;

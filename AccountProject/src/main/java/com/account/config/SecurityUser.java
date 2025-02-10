@@ -13,7 +13,7 @@ public class SecurityUser extends User {
 
     public SecurityUser(Users users) {
         super(users.getUsername(), users.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + users.getRole().toString())));
+                Collections.singletonList(new SimpleGrantedAuthority(users.getRole().toString())));
         this.users = users;
     }
 
